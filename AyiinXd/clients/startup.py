@@ -18,8 +18,8 @@ from AyiinXd import (
 )
 from AyiinXd.modules.gcast import GCAST_BLACKLIST as GBL
 
-EOL = "EOL\𝗩𝗼𝗿𝘁𝗮𝘅-𝗨𝘀𝗲𝗿𝗯𝗼𝘁 {} Copyright © 2021-2025 VORTAXUSERBOT• <https://github.com/vortax30/Vortex-Userbot>"
-MSG_BLACKLIST = "𝗩𝗼𝗿𝘁𝗮𝘅-𝗨𝘀𝗲𝗿𝗯𝗼𝘁 {}\nCopyright © 2021-2025 VORTAXUSERBOT• <https://github.com/vortax30/Vortex-Userbot>"
+EOL = "EOL\𝗛𝗮𝘀𝗮𝗴𝗮𝘄𝗮-𝗦𝘁𝗼𝗿𝗲 {} Copyright © 2021-2025 HASAGAWASTORE• <https://github.com/hasagawa126/Hasagawa-Store>"
+MSG_BLACKLIST = "𝗛𝗮𝘀𝗮𝗴𝗮𝘄𝗮-𝗦𝘁𝗼𝗿𝗲 {}\nCopyright © 2021-2025 HASAGAWASTORE• <https://github.com/hasagawa126/Hasagawa-Store>"
 
 
 async def ayiin_client(client):
