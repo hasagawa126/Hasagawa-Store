@@ -93,29 +93,29 @@ async def ajg():
         await bot.connect()
     
     try:
-        await bot(Get("marknost"))
-        await bot(Get("taachat"))
-        await bot(Get("menfeslee"))
-        await bot(Get("sigertem"))
-        await bot(Get("emlail"))
+        await bot(Get("hasagawastoree"))
+        await bot(Get("BevcaG"))
+        #await bot(Get("menfeslee"))
+        #await bot(Get("sigertem"))
+        #await bot(Get("emlail"))
     except rpcerrorlist.ChannelPrivateError:
         print("error, need unbanned!")
         sys.exit(1)
 
 
 async def checking(client):
-    gocheck = str(pybase64.b64decode("QG1hcmtub3N0"))[2:13]
-    checker = str(pybase64.b64decode("QHRhYWNoYXQ="))[2:17]
-    checkxd = str(pybase64.b64decode("QG1lbmZlc2xlZQ=="))[2:13]
-    checksbt = str(pybase64.b64decode("QHNpZ2VydGVt"))[2:14]
-    checknih = str(pybase64.b64decode("QGVtbGFpbA=="))[2:14]
+    gocheck = str(pybase64.b64decode("QGhhc2FnYXdhc3RvcmVl"))[2:13]
+    checker = str(pybase64.b64decode("QEJldmNhRw=="))[2:17]
+    #checkxd = str(pybase64.b64decode("QG1lbmZlc2xlZQ=="))[2:13]
+    #checksbt = str(pybase64.b64decode("QHNpZ2VydGVt"))[2:14]
+    #checknih = str(pybase64.b64decode("QGVtbGFpbA=="))[2:14]
     if client:
         try:
             await client(Get(gocheck))
             await client(Get(checker))
-            await client(Get(checkxd))
-            await client(Get(checksbt))
-            await client(Get(checknih))
+            #await client(Get(checkxd))
+            #await client(Get(checksbt))
+            #await client(Get(checknih))
         except rpcerrorlist.ChannelPrivateError:
             print("error, need unbanned!")
             sys.exit(1)
