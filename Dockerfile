@@ -1,5 +1,5 @@
 FROM python:3.9
-RUN git clone -b Kazu-Userbot https://github.com/vortax30/Vortex-Userbot /home/Kazuuserbot/ \
+RUN git clone -b Kazu-Userbot https://github.com/hasagawa126/Hasagawa-Store /home/Kazuuserbot/ \
     && chmod 777 /home/Kazuuserbot \
     && mkdir /home/Kazuuserbot/bin/
 
