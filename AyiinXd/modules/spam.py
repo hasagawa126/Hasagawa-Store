@@ -230,8 +230,6 @@ async def tmeme(event):
             )
 
 
-SPAM_STATUS = {}
-
 @ayiin_cmd(pattern="(delayspam|dspam) ([\\s\\S]*)")
 async def dlyspam(event):
     if event.chat_id in BLACKLIST_CHAT:
@@ -242,83 +240,25 @@ async def dlyspam(event):
         sleeptimet = sleeptimem = float(input_str[0])
     except Exception:
         return await eod(
-            event, get_string("dspam_1").format(event.pattern_match.group(1))
+            event, get_string("dspam_1").format(cmd)
         )
     xnxx = input_str[1:]
     try:
         int(xnxx[0])
     except Exception:
         return await eod(
-            event, get_string("dspam_1").format(event.pattern_match.group(1))
+            event, get_string("dspam_1").format(cmd)
         )
-
     await event.delete()
-    SPAM_STATUS[event.chat_id] = True
-    await delay_spam_function(event, reply, xnxx, sleeptimem, sleeptimet, chat_id=event.chat_id)
-
-@ayiin_cmd(pattern="stopdspam(?:\\s+([\\s\\S]+))?")
-async def stop_dlyspam(event):
-    args = event.pattern_match.group(1)
-    if not args:
-        target_chat = event.chat_id
-    else:
-        if args.startswith("@") or args.isalpha():
-            try:
-                entity = await event.client.get_entity(args)
-                target_chat = entity.id
-            except Exception:
-                return await event.edit(f"❌ Gagal menemukan grup `{args}`. Pastikan bot sudah join grup tersebut.")
-        else:
-            try:
-                target_chat = int(args)
-            except ValueError:
-                return await event.edit("⚠️ Format chat ID atau username salah.")
-
-    if target_chat in SPAM_STATUS and SPAM_STATUS[target_chat]:
-        SPAM_STATUS[target_chat] = False
-        await event.edit(f"🛑 Delay spam di `{target_chat}` berhasil dihentikan.")
-    else:
-        await event.edit(f"🚫 Tidak ada delay spam aktif di `{target_chat}`.")
-
-@ayiin_cmd(pattern="listdspam$")
-async def list_dspam(event):
-    if not SPAM_STATUS:
-        return await event.edit("✅ Tidak ada delay spam yang aktif.")
-    active_chats = [str(cid) for cid, status in SPAM_STATUS.items() if status]
-    if not active_chats:
-        return await event.edit("✅ Tidak ada delay spam yang aktif.")
-    text = "**📋 List Delay Spam Aktif:**\n"
-    for cid in active_chats:
-        text += f"• `{cid}`\n"
-    await event.edit(text)
-
-async def delay_spam_function(event, reply, xnxx, sleeptimem, sleeptimet, chat_id):
-    try:
-        counter = int(xnxx[0])
-        spam_text = str(xnxx[1]) if len(xnxx) > 1 else reply.text if reply else None
-    except Exception:
-        return await eod(event, "⚠️ Format salah. Coba lagi.")
-
-    if not spam_text:
-        return await eod(event, "⚠️ Tidak ada teks untuk di-spam.")
-
-    for _ in range(counter):
-        if not SPAM_STATUS.get(chat_id, False):
-            break
-        await event.client.send_message(chat_id, spam_text)
-        await asyncio.sleep(sleeptimem)
-
-
-SPAMFW_STATUS = {}
+    addgvar("spamwork", True)
+    await spam_function(event, reply, xnxx, sleeptimem, sleeptimet, DelaySpam=True)
 
 @ayiin_cmd(pattern="(delayspamfw|dspamfw) ([\\s\\S]*)")
 async def dlyspamfw(event):
     if event.chat_id in BLACKLIST_CHAT:
         return await event.edit(get_string("ayiin_1"))
-
+    
     input_str = "".join(event.text.split(maxsplit=1)[1:]).split(" ", 2)
-    cmd = event.pattern_match.group(1)
-
     try:
         sleeptimet = sleeptimem = float(input_str[0])
     except Exception:
@@ -329,11 +269,8 @@ async def dlyspamfw(event):
     except Exception:
         return await eod(event, get_string("dspam_1").format(cmd))
 
-    if len(input_str) < 3:
-        return await eod(event, f"⚠️ Format salah. Kirim: `{cmd} <delay> <jumlah> <link_post>`")
-
     channel_message_link = input_str[2]
-
+    
     try:
         message_id = int(channel_message_link.split('/')[-1])
         channel_username = channel_message_link.split('/')[3]
@@ -342,62 +279,26 @@ async def dlyspamfw(event):
 
     except Exception as e:
         return await eod(event, f"Error: {str(e)}")
-
+    
     await event.delete()
-    SPAMFW_STATUS[event.chat_id] = True
+    addgvar("spamwork", True)
 
     for _ in range(counter):
-        if not SPAMFW_STATUS.get(event.chat_id, False):
-            break
+        if gvarstatus("spamwork") is None:
+            return
         await event.client.forward_messages(event.chat_id, message.id, channel)
         await asyncio.sleep(sleeptimem)
-
-    if BOTLOG_CHATID:
-        log_msg = get_string("dspamfw_1") if event.is_private else get_string("dspamfw_2")
-        context = event.chat_id if event.is_private else get_display_name(await event.get_chat())
-        await event.client.send_message(
-            BOTLOG_CHATID, log_msg.format(context, event.chat_id, counter, message.text)
-        )
-
-
-@ayiin_cmd(pattern="stopfw(?:\\s+([\\s\\S]+))?")
-async def stop_fwspam(event):
-    args = event.pattern_match.group(1)
-    if not args:
-        target_chat = event.chat_id
-    else:
-        if args.startswith("@") or args.isalpha():
-            try:
-                entity = await event.client.get_entity(args)
-                target_chat = entity.id
-            except Exception:
-                return await event.edit(f"❌ Gagal menemukan grup `{args}`.")
-        else:
-            try:
-                target_chat = int(args)
-            except ValueError:
-                return await event.edit("⚠️ Format chat ID atau username salah.")
-
-    if target_chat in SPAMFW_STATUS and SPAMFW_STATUS[target_chat]:
-        SPAMFW_STATUS[target_chat] = False
-        await event.edit(f"🛑 Forward spam di `{target_chat}` berhasil dihentikan.")
-    else:
-        await event.edit(f"🚫 Tidak ada forward spam aktif di `{target_chat}`.")
-
-
-@ayiin_cmd(pattern="listfw$")
-async def list_fwspam(event):
-    if not SPAMFW_STATUS:
-        return await event.edit("✅ Tidak ada forward spam yang aktif.")
-    active_chats = [str(cid) for cid, status in SPAMFW_STATUS.items() if status]
-    if not active_chats:
-        return await event.edit("✅ Tidak ada forward spam yang aktif.")
-    text = "**📋 List Forward Spam Aktif:**\n"
-    for cid in active_chats:
-        text += f"• `{cid}`\n"
-    await event.edit(text)
-
     
+    if BOTLOG_CHATID:
+        if event.is_private:
+            await event.client.send_message(
+                BOTLOG_CHATID, get_string("dspamfw_1").format(event.chat_id, counter, message.text)
+            )
+        else:
+            await event.client.send_message(
+                BOTLOG_CHATID, get_string("dspamfw_2").format(get_display_name(await event.get_chat()), event.chat_id, counter, message.text)
+            )
+
 CMD_HELP.update(
     {
         "spam": f"**Plugin : **`spam`\
@@ -414,10 +315,6 @@ CMD_HELP.update(
         \n\n  »  **Perintah :** `{cmd}delayspam` <detik> <jumlah spam> <text>\
         \n  »  **Kegunaan : **Spam surat teks dengan huruf.\
         \n\n  •  **NOTE : Spam dengan Risiko Anda sendiri**\
-        \n\n  »  **Perintah :** `{cmd}stopdspam`\
-        \n  »  **Kegunaan : **Memberhentikan teks sebar dalam satu gc.\
-        \n\n  »  **Perintah :** `{cmd}listdspam`\
-        \n  »  **Kegunaan : **Melihat daftar sebar list yang aktif.\
         \n\n  »  Perintah : {cmd}dspamfw <detik> <jumlah spam> <link yang ingin di forward>\
         \n  »  Kegunaan : spam forward dari channel.\
     "
