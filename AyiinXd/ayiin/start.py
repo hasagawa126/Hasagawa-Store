@@ -18,10 +18,10 @@ async def startupmessage():
         if BOTLOG:
             await tgbot.send_file(
                 BOTLOG_CHATID,
-                "https://graph.org/file/d22e91671529c80c7f564-f93371b5e632c19ddd.jpg",
-                caption="𝗩𝗼𝗿𝘁𝗮𝘅-𝗨𝘀𝗲𝗿𝗯𝗼𝘁.\n     **status : Active\n     ketik `.ping` untuk cek bot!**",
-                buttons=[(Button.url("Store", "https://t.me/marknost")),
-                         (Button.url("Ress", "https://t.me/resshunter"))]
+                "https://graph.org/file/d70af44b1ce6daaeda9c8-38d69240bf4233c55a.jpg",
+                caption="𝗛𝗮𝘀𝗮𝗴𝗮𝘄𝗮-𝗦𝘁𝗼𝗿𝗲.\n     **status : Active\n     ketik `.ping` untuk cek bot!**",
+                buttons=[(Button.url("Store", "https://t.me/HasagawaStoree")),
+                         (Button.url("Owner", "https://t.me/heycaa25"))]
             )
     except Exception as e:
         LOGS.error(e)
